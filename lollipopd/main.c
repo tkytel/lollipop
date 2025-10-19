@@ -50,7 +50,7 @@ main(int argc, char *argv[])
 	(void)strncpy(ifname, IFNAME, sizeof(ifname));
 	(void)strncpy(sockpath, SOCKPATH, sizeof(sockpath));
 	(void)strncpy(spoolpath, SPOOLPATH, sizeof(spoolpath));
-	while ((c = getopt(argc, argv, "i:s:S:")) != -1)
+	while ((c = getopt(argc, argv, "i:")) != -1)
 		switch (c) {
 		case 'i':
 			(void)strncpy(ifname, optarg, sizeof(ifname));
@@ -58,20 +58,6 @@ main(int argc, char *argv[])
 			if (strcmp(ifname, optarg) != 0
 					|| ifname[0] == '\0')
 				errx(1, "invalid device name: \"%s\"", optarg);
-			break;
-		case 's':
-			(void)strncpy(sockpath, optarg, sizeof(sockpath));
-			sockpath[sizeof(sockpath)-1] = '\0';
-			if (strcmp(sockpath, optarg) != 0
-					|| sockpath[0] == '\0')
-				errx(1, "invalid socket path: \"%s\"", optarg);
-			break;
-		case 'S':
-			(void)strncpy(spoolpath, optarg, sizeof(spoolpath));
-			spoolpath[sizeof(spoolpath)-1] = '\0';
-			if (strcmp(spoolpath, optarg) != 0
-					|| spoolpath[0] == '\0')
-				errx(1, "invalid spool path: \"%s\"", optarg);
 			break;
 		case '?':
 			usage();
@@ -207,7 +193,6 @@ tun_alloc(char *dev)
 static void
 usage(void)
 {
-	(void)fprintf(stderr, "usage: lollipopd [-i devname] [-s sockpath]"
-			" [-S spooldir]\n");
+	(void)fprintf(stderr, "usage: lollipopd [-i devname]\n");
 	exit(1);
 }
