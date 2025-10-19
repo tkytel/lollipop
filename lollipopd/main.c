@@ -207,7 +207,7 @@ tun_alloc(char *dev)
 static void
 usage(void)
 {
-	(void)fprintf(stderr, "usage: lollipop [-i devname] [-s sockpath]"
+	(void)fprintf(stderr, "usage: lollipopd [-i devname] [-s sockpath]"
 			" [-S spooldir]\n");
 	exit(1);
 }
