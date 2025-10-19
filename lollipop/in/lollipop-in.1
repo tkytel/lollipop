@@ -1,0 +1,35 @@
+.\"
+.mso ja.tmac
+.Dd October 19th, 2025
+.Dt "LOLLIPOP-IN" 1
+.Os "TKYTEL" "LoLLIPoP"
+.Sh NAME
+.Nm "lollipop in"
+.Nd パケットの受信
+.Sh SYNOPSIS
+.Nm
+.Op Fl A | R
+.Sh DESCRIPTION
+.Nm
+コマンドは標準入力からパケットを受信します。
+一回のコマンド呼び出しで一つのパケットを受信できます。
+.Pp
+次のオプションを利用できます。
+.Bl -tag
+.It Fl A
+入力される形式として ASCII Armor のような形式を期待します。
+.It Fl R
+入力される形式として裸のバイナリ形式を期待します。
+.El
+.Sh EXIT STATUS
+.Ex -std
+.Sh FILES
+.Bl -tag
+.It Pa /var/run/lollipop.socket
+パケット受信用 UNIX ドメインソケット
+.El
+.Sh SEE ALSO
+.Xr lollipop 1 ,
+.Xr lollipopd 8
+.Sh BUGS
+まだ実装されていません。
