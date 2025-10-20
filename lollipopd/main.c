@@ -22,6 +22,8 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "ulid.h"
+
 #define MAX(a, b)	((a) > (b) ? (a) : (b))
 #define SUNPATHLEN	sizeof(((struct sockaddr_un *)0)->sun_path)
 #define BACKLOG	5
@@ -40,12 +42,12 @@ static void usage(void);
 int
 main(int argc, char *argv[])
 {
-	struct timeval tv;
+	struct ulid ul;
 	fd_set rfds;
 	ssize_t bytes;
 	int c, fd, nfds, rxfd, sockfd, spoolfd, tunfd;
 	char filepath[PATH_MAX], sockpath[PATH_MAX], spoolpath[PATH_MAX];
-	char buf[2048], ifname[IFNAMSIZ];
+	char buf[2048], identifier[27], ifname[IFNAMSIZ];
 
 	(void)strncpy(ifname, IFNAME, sizeof(ifname));
 	(void)strncpy(sockpath, SOCKPATH, sizeof(sockpath));
@@ -93,11 +95,11 @@ main(int argc, char *argv[])
 		if (bytes == -1)
 			err(1, "read");
 
-		if (gettimeofday(&tv, NULL) == -1)
-			err(1, "gettimeofday");
+		if (generate_ulid(&ul) == -1)
+			err(1, "generate_ulid");
+		unparse_ulid(identifier, &ul);
 		(void)snprintf(filepath, sizeof(filepath),
-				"%s.%d.%jd.%06jd", ifname, nPacket,
-				(intmax_t)tv.tv_sec, (intmax_t)tv.tv_usec);
+				"%s.%s", ifname, identifier);
 		(void)fprintf(stderr, "%s -> %s",
 				FD_ISSET(sockfd, &rfds) ? sockpath : ifname,
 				FD_ISSET(sockfd, &rfds) ? ifname : filepath);

@@ -1,7 +1,7 @@
 all: lollipopd
 
-lollipopd: main.c
-	cc -o lollipopd main.c
+lollipopd: main.c ulid.c ulid.h
+	cc -o lollipopd main.c ulid.c
 
 .PHONY: clean
 clean:
