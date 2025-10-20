@@ -27,7 +27,7 @@
 #define BACKLOG	5
 
 #define IFNAME		"post%d"
-#define SOCKPATH	"/var/run/lollipop.socket"
+#define SOCKPATH	"/var/run/lollipop/%s.socket"
 #define SPOOLPATH	"/var/spool/lollipop/"
 #define TUNTAPPATH	"/dev/net/tun"
 
@@ -48,7 +48,6 @@ main(int argc, char *argv[])
 	char buf[2048], ifname[IFNAMSIZ];
 
 	(void)strncpy(ifname, IFNAME, sizeof(ifname));
-	(void)strncpy(sockpath, SOCKPATH, sizeof(sockpath));
 	(void)strncpy(spoolpath, SPOOLPATH, sizeof(spoolpath));
 	while ((c = getopt(argc, argv, "i:")) != -1)
 		switch (c) {
@@ -69,16 +68,17 @@ main(int argc, char *argv[])
 	if (spoolfd == -1)
 		err(1, "%s", spoolpath);
 
+	tunfd = tun_alloc(ifname);
+	if (tunfd == -1)
+		err(1, "tun_alloc");
+
+	(void)snprintf(sockpath, sizeof(sockpath), SOCKPATH, ifname);
 	if (unlink(sockpath) == -1
 			&& errno != ENOENT)
 		err(1, "%s", sockpath);
 	sockfd = sock_alloc(sockpath);
 	if (sockfd == -1)
 		err(1, "sock_alloc");
-
-	tunfd = tun_alloc(ifname);
-	if (tunfd == -1)
-		err(1, "tun_alloc");
 
 	for (;; nPacket++) {
 		FD_ZERO(&rfds);
