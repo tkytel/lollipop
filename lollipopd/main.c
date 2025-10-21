@@ -33,8 +33,6 @@
 #define SPOOLPATH	"/var/spool/lollipop/waiting/"
 #define TUNTAPPATH	"/dev/net/tun"
 
-static int nPacket;
-
 static int sock_alloc(char *sockpath);
 static int tun_alloc(char *dev);
 static void usage(void);
@@ -46,11 +44,10 @@ main(int argc, char *argv[])
 	fd_set rfds;
 	ssize_t bytes;
 	int c, fd, nfds, rxfd, sockfd, spoolfd, tunfd;
-	char filepath[PATH_MAX], sockpath[PATH_MAX], spoolpath[PATH_MAX];
+	char filepath[PATH_MAX], sockpath[PATH_MAX];
 	char buf[2048], identifier[27], ifname[IFNAMSIZ];
 
 	(void)strncpy(ifname, IFNAME, sizeof(ifname));
-	(void)strncpy(spoolpath, SPOOLPATH, sizeof(spoolpath));
 	while ((c = getopt(argc, argv, "i:")) != -1)
 		switch (c) {
 		case 'i':
@@ -66,9 +63,9 @@ main(int argc, char *argv[])
 	argc -= optind;
 	argv += optind;
 
-	spoolfd = open(spoolpath, O_RDONLY | O_DIRECTORY | O_PATH);
+	spoolfd = open(SPOOLPATH, O_RDONLY | O_DIRECTORY | O_PATH);
 	if (spoolfd == -1)
-		err(1, "%s", spoolpath);
+		err(1, "%s", SPOOLPATH);
 
 	tunfd = tun_alloc(ifname);
 	if (tunfd == -1)
@@ -82,7 +79,7 @@ main(int argc, char *argv[])
 	if (sockfd == -1)
 		err(1, "sock_alloc");
 
-	for (;; nPacket++) {
+	for (;;) {
 		FD_ZERO(&rfds);
 		FD_SET(sockfd, &rfds);
 		FD_SET(tunfd, &rfds);
@@ -117,7 +114,7 @@ main(int argc, char *argv[])
 			fd = openat(spoolfd, filepath,
 					O_WRONLY | O_CREAT | O_EXCL, 0644);
 			if (fd == -1)
-				err(1, "%s/%s", spoolpath, filepath);
+				err(1, "%s/%s", SPOOLPATH, filepath);
 			if (write(fd, buf, bytes) == -1)
 				err(1, "write");
 			(void)close(fd);
