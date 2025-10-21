@@ -1,8 +1,15 @@
-all: lollipopd
+TARGET=	lollipopd
+OBJS=	./main.o ../common/ulid.o
 
-lollipopd: main.c ulid.c ulid.h
-	cc -o lollipopd main.c ulid.c
+CC=	gcc
+CFLAGS=	-I ../include -O2
+
+.PHONY: all
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) -o $@ $^
 
 .PHONY: clean
 clean:
-	rm -f lollipopd
+	$(RM) $(TARGET) $(OBJS)
