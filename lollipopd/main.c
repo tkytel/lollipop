@@ -7,6 +7,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <sys/select.h>
+#include <sys/param.h>
 
 #include <linux/if.h>
 #include <linux/if_tun.h>
@@ -24,7 +25,6 @@
 
 #include "ulid.h"
 
-#define MAX(a, b)	((a) > (b) ? (a) : (b))
 #define SUNPATHLEN	sizeof(((struct sockaddr_un *)0)->sun_path)
 #define BACKLOG	5
 
