@@ -1,7 +1,8 @@
 LOLLIPOPD=	lollipopd
+LOLLIPOP=	lollipop
 
-.PHONY: all $(LOLLIPOPD)
-all: $(LOLLIPOPD)
+.PHONY: all $(LOLLIPOPD) $(LOLLIPOP)
+all: $(LOLLIPOPD) $(LOLLIPOP)
 
-$(LOLLIPOPD):
+$(LOLLIPOPD) $(LOLLIPOP):
 	$(MAKE) -C $@
