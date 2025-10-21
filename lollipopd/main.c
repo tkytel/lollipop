@@ -30,7 +30,7 @@
 
 #define IFNAME		"post%d"
 #define SOCKPATH	"/var/run/lollipop.%s.socket"
-#define SPOOLPATH	"/var/spool/lollipop/"
+#define SPOOLPATH	"/var/spool/lollipop/waiting/"
 #define TUNTAPPATH	"/dev/net/tun"
 
 static int nPacket;
