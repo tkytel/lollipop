@@ -8,6 +8,7 @@
 .Nd パケットの削除
 .Sh SYNOPSIS
 .Nm
+.Op Fl h
 .Ar identifier
 .Op Ar ...
 .Sh DESCRIPTION
@@ -15,6 +16,12 @@
 コマンドは
 .Ar identifier
 で指定されるパケットを削除済としてマークします。
+.Pp
+以下のオプションを指定できます。
+.Bl -tag
+.It Fl h
+コマンドの使い方を表示して終了します。
+.El
 .Sh EXIT STATUS
 .Ex -std
 .Sh FILES
