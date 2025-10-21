@@ -27,7 +27,7 @@
 #define BACKLOG	5
 
 #define IFNAME		"post%d"
-#define SOCKPATH	"/var/run/lollipop/%s.socket"
+#define SOCKPATH	"/var/run/lollipop.%s.socket"
 #define SPOOLPATH	"/var/spool/lollipop/"
 #define TUNTAPPATH	"/dev/net/tun"
 
