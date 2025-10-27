@@ -174,7 +174,7 @@ tun_alloc(char *dev)
 		return -1;
 
 	(void)memset(&ifr, 0, sizeof(ifr));
-	ifr.ifr_flags = IFF_TUN | IFF_NO_PI;
+	ifr.ifr_flags = IFF_TUN;
 	if (dev != NULL && *dev != '\0')
 		(void)strncpy(ifr.ifr_name, dev, IFNAMSIZ);
 
