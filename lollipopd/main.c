@@ -7,6 +7,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <sys/select.h>
+#include <sys/param.h>
 
 #include <linux/if.h>
 #include <linux/if_tun.h>
@@ -22,16 +23,15 @@
 #include <string.h>
 #include <unistd.h>
 
-#define MAX(a, b)	((a) > (b) ? (a) : (b))
+#include "ulid.h"
+
 #define SUNPATHLEN	sizeof(((struct sockaddr_un *)0)->sun_path)
 #define BACKLOG	5
 
 #define IFNAME		"post%d"
-#define SOCKPATH	"/var/run/lollipop.socket"
-#define SPOOLPATH	"/var/spool/lollipop/"
+#define SOCKPATH	"/var/run/lollipop.%s.socket"
+#define SPOOLPATH	"/var/spool/lollipop/waiting/"
 #define TUNTAPPATH	"/dev/net/tun"
-
-static int nPacket;
 
 static int sock_alloc(char *sockpath);
 static int tun_alloc(char *dev);
@@ -40,17 +40,15 @@ static void usage(void);
 int
 main(int argc, char *argv[])
 {
-	struct timeval tv;
+	struct ulid ul;
 	fd_set rfds;
 	ssize_t bytes;
 	int c, fd, nfds, rxfd, sockfd, spoolfd, tunfd;
-	char filepath[PATH_MAX], sockpath[PATH_MAX], spoolpath[PATH_MAX];
-	char buf[2048], ifname[IFNAMSIZ];
+	char filepath[PATH_MAX], sockpath[PATH_MAX];
+	char buf[2048], identifier[27], ifname[IFNAMSIZ];
 
 	(void)strncpy(ifname, IFNAME, sizeof(ifname));
-	(void)strncpy(sockpath, SOCKPATH, sizeof(sockpath));
-	(void)strncpy(spoolpath, SPOOLPATH, sizeof(spoolpath));
-	while ((c = getopt(argc, argv, "i:s:S:")) != -1)
+	while ((c = getopt(argc, argv, "i:")) != -1)
 		switch (c) {
 		case 'i':
 			(void)strncpy(ifname, optarg, sizeof(ifname));
@@ -59,30 +57,21 @@ main(int argc, char *argv[])
 					|| ifname[0] == '\0')
 				errx(1, "invalid device name: \"%s\"", optarg);
 			break;
-		case 's':
-			(void)strncpy(sockpath, optarg, sizeof(sockpath));
-			sockpath[sizeof(sockpath)-1] = '\0';
-			if (strcmp(sockpath, optarg) != 0
-					|| sockpath[0] == '\0')
-				errx(1, "invalid socket path: \"%s\"", optarg);
-			break;
-		case 'S':
-			(void)strncpy(spoolpath, optarg, sizeof(spoolpath));
-			spoolpath[sizeof(spoolpath)-1] = '\0';
-			if (strcmp(spoolpath, optarg) != 0
-					|| spoolpath[0] == '\0')
-				errx(1, "invalid spool path: \"%s\"", optarg);
-			break;
 		case '?':
 			usage();
 		}
 	argc -= optind;
 	argv += optind;
 
-	spoolfd = open(spoolpath, O_RDONLY | O_DIRECTORY | O_PATH);
+	spoolfd = open(SPOOLPATH, O_RDONLY | O_DIRECTORY | O_PATH);
 	if (spoolfd == -1)
-		err(1, "%s", spoolpath);
+		err(1, "%s", SPOOLPATH);
 
+	tunfd = tun_alloc(ifname);
+	if (tunfd == -1)
+		err(1, "tun_alloc");
+
+	(void)snprintf(sockpath, sizeof(sockpath), SOCKPATH, ifname);
 	if (unlink(sockpath) == -1
 			&& errno != ENOENT)
 		err(1, "%s", sockpath);
@@ -90,11 +79,7 @@ main(int argc, char *argv[])
 	if (sockfd == -1)
 		err(1, "sock_alloc");
 
-	tunfd = tun_alloc(ifname);
-	if (tunfd == -1)
-		err(1, "tun_alloc");
-
-	for (;; nPacket++) {
+	for (;;) {
 		FD_ZERO(&rfds);
 		FD_SET(sockfd, &rfds);
 		FD_SET(tunfd, &rfds);
@@ -107,11 +92,11 @@ main(int argc, char *argv[])
 		if (bytes == -1)
 			err(1, "read");
 
-		if (gettimeofday(&tv, NULL) == -1)
-			err(1, "gettimeofday");
+		if (generate_ulid(&ul) == -1)
+			err(1, "generate_ulid");
+		unparse_ulid(identifier, &ul);
 		(void)snprintf(filepath, sizeof(filepath),
-				"%s.%d.%jd.%06jd", ifname, nPacket,
-				(intmax_t)tv.tv_sec, (intmax_t)tv.tv_usec);
+				"%s.%s", ifname, identifier);
 		(void)fprintf(stderr, "%s -> %s",
 				FD_ISSET(sockfd, &rfds) ? sockpath : ifname,
 				FD_ISSET(sockfd, &rfds) ? ifname : filepath);
@@ -129,7 +114,7 @@ main(int argc, char *argv[])
 			fd = openat(spoolfd, filepath,
 					O_WRONLY | O_CREAT | O_EXCL, 0644);
 			if (fd == -1)
-				err(1, "%s/%s", spoolpath, filepath);
+				err(1, "%s/%s", SPOOLPATH, filepath);
 			if (write(fd, buf, bytes) == -1)
 				err(1, "write");
 			(void)close(fd);
@@ -189,7 +174,7 @@ tun_alloc(char *dev)
 		return -1;
 
 	(void)memset(&ifr, 0, sizeof(ifr));
-	ifr.ifr_flags = IFF_TUN | IFF_NO_PI;
+	ifr.ifr_flags = IFF_TUN;
 	if (dev != NULL && *dev != '\0')
 		(void)strncpy(ifr.ifr_name, dev, IFNAMSIZ);
 
@@ -207,7 +192,6 @@ tun_alloc(char *dev)
 static void
 usage(void)
 {
-	(void)fprintf(stderr, "usage: lollipop [-i devname] [-s sockpath]"
-			" [-S spooldir]\n");
+	(void)fprintf(stderr, "usage: lollipopd [-i devname]\n");
 	exit(1);
 }

@@ -1,0 +1,38 @@
+.\"
+.mso ja.tmac
+.Dd October 19th, 2025
+.Dt "LOLLIPOP-OUT" 1
+.Os "TKYTEL" "LoLLIPoP"
+.Sh NAME
+.Nm "lollipop out"
+.Nd パケットの送信
+.Sh SYNOPSIS
+.Nm
+.Op Fl hn
+.Ar identifier
+.Sh DESCRIPTION
+.Nm
+コマンドは標準出力に
+.Ar identifier
+で指定されるパケットを出力し、送信済としてマークします。
+一回のコマンド呼び出しで一つのパケットを送信できます。
+.Pp
+次のオプションを利用できます。
+.Bl -tag
+.It Fl h
+コマンドの使い方を表示して終了します。
+.It Fl n
+パケットを出力しますが、送信済としてマークしません。
+.El
+.Sh EXIT STATUS
+.Ex -std
+.Sh FILES
+.Bl -tag
+.It Pa /var/spool/lollipop
+スプーリングディレクトリ
+.El
+.Sh SEE ALSO
+.Xr lollipop 1 ,
+.Xr lollipopd 8
+.Sh BUGS
+まだ実装されていません。

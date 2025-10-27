@@ -1,0 +1,31 @@
+.\"
+.mso ja.tmac
+.Dd October 19th, 2025
+.Dt "LOLLIPOP-LS" 1
+.Os "TKYTEL" "LoLLIPoP"
+.Sh NAME
+.Nm "lollipop ls"
+.Nd 送信待ちパケットの一覧
+.Sh SYNOPSIS
+.Nm
+.Op Fl h
+.Sh DESCRIPTION
+.Nm
+コマンドは送信を待っているパケットの一覧を表示します。
+出力は標準出力に書き出されます。
+.Pp
+以下のオプションを指定できます。
+.Bl -tag
+.It Fl h
+コマンドの使い方を表示して終了します。
+.El
+.Sh EXIT STATUS
+.Ex -std
+.Sh FILES
+.Bl -tag
+.It Pa /var/spool/lollipop
+スプーリングディレクトリ
+.El
+.Sh SEE ALSO
+.Xr lollipop 1 ,
+.Xr lollipopd 8

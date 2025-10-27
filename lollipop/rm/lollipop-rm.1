@@ -1,0 +1,34 @@
+.\"
+.mso ja.tmac
+.Dd October 19th, 2025
+.Dt "LOLLIPOP-RM" 1
+.Os "TKYTEL" "LoLLIPoP"
+.Sh NAME
+.Nm "lollipop rm"
+.Nd パケットの削除
+.Sh SYNOPSIS
+.Nm
+.Op Fl h
+.Ar identifier
+.Op Ar ...
+.Sh DESCRIPTION
+.Nm
+コマンドは
+.Ar identifier
+で指定されるパケットを削除済としてマークします。
+.Pp
+以下のオプションを指定できます。
+.Bl -tag
+.It Fl h
+コマンドの使い方を表示して終了します。
+.El
+.Sh EXIT STATUS
+.Ex -std
+.Sh FILES
+.Bl -tag
+.It Pa /var/spool/lollipop
+スプーリングディレクトリ
+.El
+.Sh SEE ALSO
+.Xr lollipop 1 ,
+.Xr lollipopd 8

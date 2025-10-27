@@ -1,8 +1,8 @@
-all: lollipop
+LOLLIPOPD=	lollipopd
+LOLLIPOP=	lollipop
 
-lollipop: main.c
-	cc -o lollipop main.c
+.PHONY: all $(LOLLIPOPD) $(LOLLIPOP)
+all: $(LOLLIPOPD) $(LOLLIPOP)
 
-.PHONY: clean
-clean:
-	rm -f lollipop
+$(LOLLIPOPD) $(LOLLIPOP):
+	$(MAKE) -C $@
