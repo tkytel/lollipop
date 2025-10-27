@@ -1,6 +1,6 @@
 .\"
 .mso ja.tmac
-.Dd October 19th, 2025
+.Dd October 27th, 2025
 .Dt "LOLLIPOP-IN" 1
 .Os "TKYTEL" "LoLLIPoP"
 .Sh NAME
@@ -8,29 +8,40 @@
 .Nd パケットの受信
 .Sh SYNOPSIS
 .Nm
-.Op Fl A | R
+.Op Fl h
+.Op Fl i Ar interface
 .Sh DESCRIPTION
 .Nm
 コマンドは標準入力からパケットを受信します。
 一回のコマンド呼び出しで一つのパケットを受信できます。
 .Pp
+パケットは次の形式のバイナリで入力される必要があります。
+.Bl -enum -compact
+.It
+16\ bit のフラグ情報。
+.It
+16\ bit のプロトコル識別子。
+.It
+L3 データグラムの本体。
+.El
+.Pp
 次のオプションを利用できます。
 .Bl -tag
-.It Fl A
-入力される形式として ASCII Armor のような形式を期待します。
-これがデフォルトの指定です。
-.It Fl R
-入力される形式として裸のバイナリ形式を期待します。
+.It Fl h
+コマンドの使い方を表示して終了します。
+.It Fl i Ar interface
+パケットを入力するネットワークインタフェース名を指定します。
+省略した場合、
+.Ql post0
+を指定したものとして扱います。
 .El
 .Sh EXIT STATUS
 .Ex -std
 .Sh FILES
 .Bl -tag
-.It Pa /var/run/lollipop.socket
+.It Pa /var/run/lollipop.*.socket
 パケット受信用 UNIX ドメインソケット
 .El
 .Sh SEE ALSO
 .Xr lollipop 1 ,
 .Xr lollipopd 8
-.Sh BUGS
-まだ実装されていません。
