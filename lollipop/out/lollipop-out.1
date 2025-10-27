@@ -8,8 +8,7 @@
 .Nd パケットの送信
 .Sh SYNOPSIS
 .Nm
-.Op Fl A | R
-.Op Fl n
+.Op Fl hn
 .Ar identifier
 .Sh DESCRIPTION
 .Nm
@@ -20,11 +19,8 @@
 .Pp
 次のオプションを利用できます。
 .Bl -tag
-.It Fl A
-ASCII Armor のような形式で出力します。
-これがデフォルトの指定です。
-.It Fl R
-裸のバイナリ形式で出力します。
+.It Fl h
+コマンドの使い方を表示して終了します。
 .It Fl n
 パケットを出力しますが、送信済としてマークしません。
 .El
