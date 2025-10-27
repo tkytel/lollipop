@@ -8,39 +8,16 @@
 .Nd 送信待ちパケットの一覧
 .Sh SYNOPSIS
 .Nm
-.Op Fl l
-.Op Fl d Ar destination
-.Op Fl i Ar interface
-.Op Fl p Ar protocol
-.Op Fl s Ar source
-.Op Ar identifier ...
+.Op Fl h
 .Sh DESCRIPTION
 .Nm
 コマンドは送信を待っているパケットの一覧を表示します。
 出力は標準出力に書き出されます。
-.Ar identifier
-が指定される場合、その識別子に対応するパケットを表示します。
 .Pp
-以下のオプションを利用してパケットを絞り込めます。
+以下のオプションを指定できます。
 .Bl -tag
-.It Fl d Ar destination
-送信先アドレスが
-.Ar destination
-であるものを表示します。
-.It Fl l
-詳細を表示します。
-.It Fl i Ar interface
-送信元インタフェース名が
-.Ar interface
-であるものを表示します。
-.It Fl p Ar protocol
-プロトコルが
-.Ar protocol
-であるものを表示します。
-.It Fl s Ar source
-送信元アドレスが
-.Ar source
-であるものを表示します。
+.It Fl h
+コマンドの使い方を表示して終了します。
 .El
 .Sh EXIT STATUS
 .Ex -std
@@ -52,5 +29,3 @@
 .Sh SEE ALSO
 .Xr lollipop 1 ,
 .Xr lollipopd 8
-.Sh BUGS
-まだ実装されていません。
