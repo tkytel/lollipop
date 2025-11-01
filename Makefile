@@ -6,3 +6,8 @@ all: $(LOLLIPOPD) $(LOLLIPOP)
 
 $(LOLLIPOPD) $(LOLLIPOP):
 	$(MAKE) -C $@
+
+.PHONY: clean
+clean:
+	$(MAKE) -C $(LOLLIPOPD) $@
+	$(MAKE) -C $(LOLLIPOP) $@
