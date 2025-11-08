@@ -13,9 +13,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#define WAITINGDIR	"/var/spool/lollipop/waiting/"
-#define SENDINGDIR	"/var/spool/lollipop/sending/"
-#define SENTDIR		"/var/spool/lollipop/sent/"
+#include "path.h"
 
 static void usage(FILE *fp);
 static int search_packet(char *path, size_t pathlen, const char *identifier);

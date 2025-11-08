@@ -11,7 +11,8 @@
 #include <string.h>
 #include <unistd.h>
 
-#define INPUTSOCKET	"/var/run/lollipop.%s.socket"
+#include "path.h"
+
 #define DEFAULTIFNAME	"post0"
 
 static int open_input(const char *ifname);

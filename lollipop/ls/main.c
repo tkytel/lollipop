@@ -12,7 +12,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#define WAITINGDIR	"/var/spool/lollipop/waiting/"
+#include "path.h"
 
 static void usage(FILE *fp);
 

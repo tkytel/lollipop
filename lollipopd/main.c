@@ -23,15 +23,13 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "path.h"
 #include "ulid.h"
 
 #define SUNPATHLEN	sizeof(((struct sockaddr_un *)0)->sun_path)
 #define BACKLOG	5
 
 #define IFNAME		"post%d"
-#define SOCKPATH	"/var/run/lollipop.%s.socket"
-#define SPOOLPATH	"/var/spool/lollipop/waiting/"
-#define TUNTAPPATH	"/dev/net/tun"
 
 static int sock_alloc(char *sockpath);
 static int tun_alloc(char *dev);
@@ -63,15 +61,15 @@ main(int argc, char *argv[])
 	argc -= optind;
 	argv += optind;
 
-	spoolfd = open(SPOOLPATH, O_RDONLY | O_DIRECTORY | O_PATH);
+	spoolfd = open(WAITINGDIR, O_RDONLY | O_DIRECTORY | O_PATH);
 	if (spoolfd == -1)
-		err(1, "%s", SPOOLPATH);
+		err(1, "%s", WAITINGDIR);
 
 	tunfd = tun_alloc(ifname);
 	if (tunfd == -1)
 		err(1, "tun_alloc");
 
-	(void)snprintf(sockpath, sizeof(sockpath), SOCKPATH, ifname);
+	(void)snprintf(sockpath, sizeof(sockpath), INPUTSOCKET, ifname);
 	if (unlink(sockpath) == -1
 			&& errno != ENOENT)
 		err(1, "%s", sockpath);
@@ -114,7 +112,7 @@ main(int argc, char *argv[])
 			fd = openat(spoolfd, filepath,
 					O_WRONLY | O_CREAT | O_EXCL, 0644);
 			if (fd == -1)
-				err(1, "%s/%s", SPOOLPATH, filepath);
+				err(1, "%s/%s", WAITINGDIR, filepath);
 			if (write(fd, buf, bytes) == -1)
 				err(1, "write");
 			(void)close(fd);
