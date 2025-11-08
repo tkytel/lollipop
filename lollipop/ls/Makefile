@@ -2,7 +2,7 @@ TARGET=	lollipop-ls
 OBJS=	./main.o
 
 CC=	gcc
-CFLAGS=	-O2
+CFLAGS=	-I../../include -O2
 
 .PHONY: all
 all: $(TARGET)
