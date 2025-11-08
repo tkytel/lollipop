@@ -7,7 +7,7 @@ all: $(LOLLIPOPD) $(LOLLIPOP)
 $(LOLLIPOPD) $(LOLLIPOP):
 	$(MAKE) -C $@
 
-.PHONY: clean
-clean:
+.PHONY: clean install
+install clean:
 	$(MAKE) -C $(LOLLIPOPD) $@
 	$(MAKE) -C $(LOLLIPOP) $@

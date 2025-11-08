@@ -6,6 +6,6 @@ all: $(COMMANDS)
 $(COMMANDS):
 	$(MAKE) -C $@
 
-.PHONY: clean
-clean:
+.PHONY: clean install
+install clean:
 	for c in $(COMMANDS); do $(MAKE) -C $$c $@; done
