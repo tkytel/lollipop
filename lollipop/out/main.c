@@ -125,5 +125,5 @@ search_packet(char *path, size_t pathlen, const char *identifier)
 static void
 usage(FILE *fp)
 {
-	(void)fprintf(fp, "usage: lollipop rm [-hn] identifier\n");
+	(void)fprintf(fp, "usage: lollipop out [-hn] identifier\n");
 }
