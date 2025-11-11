@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 
 #include <err.h>
+#include <errno.h>
 #include <dirent.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -18,7 +19,8 @@ static void usage(FILE *fp);
 int
 main(int argc, char *argv[])
 {
-	struct dirent **list;
+	struct dirent *d;
+	DIR *dirp;
 	int c, dir, i, match;
 
 	while ((c = getopt(argc, argv, "h")) != -1)
@@ -34,19 +36,16 @@ main(int argc, char *argv[])
 	argc -= optind;
 	argv += optind;
 
-	dir = open(WAITINGDIR, O_RDONLY | O_DIRECTORY | O_PATH);
-	if (dir == -1)
+	dirp = opendir(WAITINGDIR);
+	if (dirp == NULL)
 		err(1, "%s", WAITINGDIR);
 
-	match = scandirat(dir, ".", &list, NULL, alphasort);
-	if (match == -1)
-		err(1, "scandir");
+	while (errno = 0, (d = readdir(dirp)) != NULL)
+		(void)puts(d->d_name);
+	if (errno != 0)
+		err(1, "%s", WAITINGDIR);
 
-	for (i = 0; i < match; i++) {
-		(void)puts(list[i]->d_name);
-		free(list[i]);
-	}
-	free(list);
+	(void)closedir(dirp);
 
 	return 0;
 }
