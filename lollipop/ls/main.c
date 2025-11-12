@@ -41,7 +41,8 @@ main(int argc, char *argv[])
 		err(1, "%s", WAITINGDIR);
 
 	while (errno = 0, (d = readdir(dirp)) != NULL)
-		(void)puts(d->d_name);
+		if (d->d_name[0] != '.')
+			(void)puts(d->d_name);
 	if (errno != 0)
 		err(1, "%s", WAITINGDIR);
 
