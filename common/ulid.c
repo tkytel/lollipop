@@ -7,6 +7,8 @@
 
 #include "ulid.h"
 
+static const char *ctab = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
+
 int
 generate_ulid(struct ulid *ul)
 {
@@ -29,10 +31,38 @@ generate_ulid(struct ulid *ul)
 	return 0;
 }
 
+int
+parse_ulid(struct ulid *ul, const char *in)
+{
+	size_t i, j, offset;
+	uint_least32_t tmp;
+	char buf[16], *p;
+
+	if (strlen(in) != 26)
+		return -1;
+
+	offset = -2;
+	tmp = 0;
+	for (i = 0, j = 0; i < 26; i++) {
+		p = strchr(ctab, in[i]);
+		if (p == NULL)
+			return -1;
+
+		tmp = tmp << 5 | p - ctab;
+		offset += 5;
+		while (offset >= 8) {
+			offset -= 8;
+			buf[j++] = tmp >> offset;
+		}
+	}
+	(void)memcpy(ul, buf, sizeof(buf));
+
+	return 0;
+}
+
 void
 unparse_ulid(char *out, const struct ulid *ul)
 {
-	const char *ctab = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
 	size_t i, j, offset;
 	uint_least16_t tmp;
 	uint8_t buf[16];

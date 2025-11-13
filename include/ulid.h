@@ -9,6 +9,7 @@ struct ulid {
 } __attribute__((__packed__));
 
 int generate_ulid(struct ulid *ul);
+int parse_ulid(struct ulid *ul, const char *in);
 void unparse_ulid(char *out, const struct ulid *ul);
 
 #endif	/* !ULID_H */
