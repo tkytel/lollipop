@@ -61,6 +61,19 @@ parse_ulid(struct ulid *ul, const char *in)
 }
 
 void
+timestamp_ulid(struct timeval *tv, const struct ulid *ul)
+{
+	uint_least64_t msec;
+	size_t i;
+
+	msec = 0;
+	for (i = 0; i < sizeof(ul->ul_time); i++)
+		msec = msec << 8 | ul->ul_time[i];
+	tv->tv_usec = msec % 1000 * 1000;
+	tv->tv_sec = msec / 1000;
+}
+
+void
 unparse_ulid(char *out, const struct ulid *ul)
 {
 	size_t i, j, offset;
