@@ -1,5 +1,5 @@
 TARGET=	lollipop-ls
-OBJS=	./main.o
+OBJS=	./main.o ../../common/ulid.o
 
 CC=	gcc
 CFLAGS=	-I../../include -O2
