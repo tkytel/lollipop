@@ -3,6 +3,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include <arpa/inet.h>
+
 #include <linux/if_tun.h>
 
 #include <err.h>
@@ -103,7 +105,7 @@ detail_packet(int dir, const char *name)
 	(void)snprintf(str, sizeof(str), fmt, tv.tv_usec / 1000);
 
 	(void)printf("%04X\t%zu\t%s\t%s\n",
-			(unsigned)pi.proto, (size_t)st.st_size, str, name);
+			ntohs(pi.proto), (size_t)st.st_size, str, name);
 
 	return 0;
 }
