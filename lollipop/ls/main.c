@@ -28,17 +28,18 @@ main(int argc, char *argv[])
 {
 	struct dirent *d;
 	DIR *dirp;
-	int c, dir, i, lflag, match;
+	int c, dir, i, match;
+	int lflag;
 
 	lflag = 0;
-	while ((c = getopt(argc, argv, "lh")) != -1)
+	while ((c = getopt(argc, argv, "hl")) != -1)
 		switch (c) {
-		case 'l':
-			lflag++;
-			break;
 		case 'h':
 			usage(stdout);
 			exit(0);
+		case 'l':
+			lflag++;
+			break;
 		case '?':
 		default:
 			usage(stderr);
@@ -113,5 +114,5 @@ detail_packet(int dir, const char *name)
 static void
 usage(FILE *fp)
 {
-	(void)fprintf(fp, "usage: lollipop ls [-lh]\n");
+	(void)fprintf(fp, "usage: lollipop ls [-hl]\n");
 }
