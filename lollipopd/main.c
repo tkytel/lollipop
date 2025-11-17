@@ -31,7 +31,7 @@
 
 #define IFNAME		"post%d"
 
-static int sock_alloc(char *sockpath);
+static int sock_alloc(const char *sockpath);
 static int tun_alloc(char *dev);
 static void usage(void);
 
@@ -127,7 +127,7 @@ main(int argc, char *argv[])
 }
 
 static int
-sock_alloc(char *sockpath)
+sock_alloc(const char *sockpath)
 {
 	struct sockaddr_un *sun;
 	socklen_t addrlen;
