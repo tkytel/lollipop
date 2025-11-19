@@ -27,7 +27,6 @@
 #include "ulid.h"
 
 #define SUNPATHLEN	sizeof(((struct sockaddr_un *)0)->sun_path)
-#define BACKLOG	5
 
 #define IFNAME		"post%d"
 
