@@ -128,34 +128,25 @@ main(int argc, char *argv[])
 static int
 sock_alloc(const char *sockpath)
 {
-	struct sockaddr_un *sun;
-	socklen_t addrlen;
+	struct sockaddr_un sun;
 	int error, fd;
 
-	addrlen = offsetof(struct sockaddr_un, sun_path) + strlen(sockpath)+1;
-	sun = malloc((size_t)addrlen);
-	if (sun == NULL)
+	if (strlen(sockpath) > SUNPATHLEN)
 		return -1;
 
 	fd = socket(AF_UNIX, SOCK_DGRAM, 0);
-	if (fd == -1) {
-		error = errno;
-		free(sun);
-		errno = error;
+	if (fd == -1)
 		return -1;
-	}
 
-	(void)memset(sun, 0, addrlen);
-	sun->sun_family = AF_UNIX;
-	(void)strcpy(sun->sun_path, sockpath);
-	if (bind(fd, (struct sockaddr *)sun, addrlen) == -1) {
+	(void)memset(&sun, 0, sizeof(sun));
+	sun.sun_family = AF_UNIX;
+	(void)strncpy(sun.sun_path, sockpath, sizeof(sun.sun_path));
+	if (bind(fd, (struct sockaddr *)&sun, sizeof(sun)) == -1) {
 		error = errno;
-		free(sun);
 		(void)close(fd);
 		errno = error;
 		return -1;
 	}
-	free(sun);
 
 	return fd;
 }
