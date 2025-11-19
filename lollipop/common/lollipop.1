@@ -1,0 +1,51 @@
+.\"
+.mso ja.tmac
+.Dd 20th November, 2025
+.Dt "LOLLIPOP" 1
+.Os "TKYTEL" "LoLLIPoP"
+.Sh NAME
+.Nm "lollipop"
+.Nd Lots of Latency Letter IP over Post
+.Sh SYNOPSIS
+.Nm
+.Ar subcommand
+.Op Ar options...
+.Op Ar args...
+.Sh DESCRIPTION
+.Nm
+は郵便を利用したデータリンクのための通信インタフェイスを提供し、
+IP をはじめとする各種の通信をカプセル化します。
+.Pp
+.Nm
+コマンドには以下のサブコマンドがあります。
+詳細は各 man page を参照してください。
+.Bl -tag
+.It Nm in
+パケットを外部から受信します。
+.Pq Xr lollipop-in 1
+.It Nm out
+パケットを外部に送信します。
+.Pq Xr lollipop-out 1
+.It Nm ls
+送信待ちパケットを一覧表示します。
+.Pq Xr lollipop-ls 1
+.It Nm rm
+送信待ちパケットを破棄します。
+.Pq Xr lollipop-rm 1
+.El
+.Pp
+.Sh EXIT STATUS
+.Ex -std
+.Sh FILES
+.Bl -tag
+.It Pa /var/spool/lollipop
+スプーリングディレクトリ
+.It Pa /var/run/lollipop.%s.socket
+パケット入力のための UNIX ソケット
+.El
+.Sh SEE ALSO
+.Xr lollipop-in 1 ,
+.Xr lollipop-out 1 ,
+.Xr lollipop-ls 1 ,
+.Xr lollipop-rm 1 ,
+.Xr lollipopd 8
