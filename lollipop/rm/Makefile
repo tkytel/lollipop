@@ -1,5 +1,5 @@
 TARGET=	lollipop-rm
-OBJS=	./main.o
+OBJS=	./main.o ../../common/match.o
 
 CC=	gcc
 CFLAGS=	-I../../include -O2

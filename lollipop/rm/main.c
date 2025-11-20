@@ -13,6 +13,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "match.h"
 #include "path.h"
 
 static void usage(FILE *fp);
@@ -84,7 +85,7 @@ search_packet(char *path, size_t pathlen, const char *identifier)
 		return -1;
 
 	while (errno = 0, (d = readdir(dirp)) != NULL)
-		if (strstr(d->d_name, identifier) != NULL) {
+		if (ends_with(d->d_name, identifier)) {
 			strncpy(path, d->d_name, pathlen);
 			path[pathlen-1] = '\0';
 			(void)closedir(dirp);
