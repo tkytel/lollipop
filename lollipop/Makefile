@@ -1,4 +1,4 @@
-COMMANDS=	in ls out rm
+COMMANDS=	common in ls out rm
 
 .PHONY: all $(COMMANDS)
 all: $(COMMANDS)
