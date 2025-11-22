@@ -131,8 +131,10 @@ sock_alloc(const char *sockpath)
 	struct sockaddr_un sun;
 	int error, fd;
 
-	if (strlen(sockpath) > SUNPATHLEN)
+	if (strlen(sockpath) > SUNPATHLEN) {
+		errno = ENAMETOOLONG;
 		return -1;
+	}
 
 	fd = socket(AF_UNIX, SOCK_DGRAM, 0);
 	if (fd == -1)
